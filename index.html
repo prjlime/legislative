@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lime mainframe</title>
+    <style>
+        /* RESET AND CANVAS WRAPPER ARCHITECTURE */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #050507;
+            font-family: 'Courier New', Courier, monospace;
+            color: #9bf00b; /* Core project lime green tint */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: background-color 0.5s ease;
+        }
+
+        /* THE CHASSIS TV FRAME CONSTRUCT */
+        .tv-container {
+            position: relative;
+            width: 800px;  /* Desktop footprint size */
+            height: 600px;
+            background-image: url('tv.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* VIRTUAL CRT GLASS SCREEN INSET (Calibrated for your specific image) */
+        .tv-screen {
+            position: absolute;
+            top: 13.5%;       /* Lowered slightly to line up with the top glass curve */
+            left: 17%;        /* Pushed inward right to clear the wider left bezel margin */
+            width: 66%;       /* Adjusted width ratio for this specific aspect ratio */
+            height: 61.5%;    /* Shortened slightly to avoid bleeding into the bottom control strip */
+            background-color: #0b0b0f;
+            border-radius: 35px / 25px; /* Creates an asymmetrical curved bulb look */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 25px 25px 20px 25px;
+            box-sizing: border-box;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.9), 0 0 20px rgba(155, 240, 11, 0.05);
+        }
+
+        /* Ambient scanline glow filter texture overlayed over glass elements */
+        .tv-screen::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.04));
+            z-index: 10;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        /* Dynamic white noise/static animation background */
+        .tv-static-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://w3.org id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04; /* Very subtle fuzz layer inside the screen space */
+            z-index: 2;
+            pointer-events: none;
+            animation: staticNoise 0.15s steps(2) infinite;
+        }
+
+        @keyframes staticNoise {
+            0% { transform: translate(0,0); }
+            50% { transform: translate(-1%, 1%); }
+            100% { transform: translate(1%, -1%); }
+        }
+
+        /* SCROLLABLE MONITOR LOG VIEWPORT */
+        .output-display {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding-right: 5px;
+            z-index: 5;
+        }
+
+        .log-entry {
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .system-prefix {
+            color: #444444;
+        }
+
+        .accent-text {
+            color: #ffffff;
+        }
+
+        .alert-text {
+            color: #ff3333;
+            text-shadow: 0 0 8px rgba(255, 51, 51, 0.4);
+        }
+
+        .gold-text {
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        /* CLI INTERFACE WORK LINE */
+        .input-line {
+            display: flex;
+            align-items: center;
+            border-top: 1px dashed rgba(155, 240, 11, 0.15);
+            padding-top: 12px;
+            z-index: 5;
+        }
+
+        .prompt-symbol {
+            font-size: 0.9rem;
+            margin-right: 8px;
+            user-select: none;
+        }
+
+        #terminalPrompt {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            outline: none;
+            caret-color: #9bf00b;
+        }
+
+        /* SYSTEM SCREEN OVERRIDES (MODIFICATIONS) */
+        .friends-theme .tv-screen {
+            background-color: #1e112a; /* Monica's room violet layout tint */
+            color: #f7ca18;
+        }
+        .friends-theme #terminalPrompt {
+            caret-color: #f7ca18;
+        }
+
+        .glitch-flash .tv-screen {
+            animation: screenVibe 0.2s steps(2) 2;
+        }
+
+        @keyframes screenVibe {
+            0% { background-color: #ff3333; transform: scale(1.01); }
+            50% { background-color: #ffffff; transform: scale(0.99); }
+            100% { background-color: #0b0b0f; }
+        }
+
+        /* Custom Scrollbar configuration hidden specs */
+        .output-display::-webkit-scrollbar { width: 4px; }
+        .output-display::-webkit-scrollbar-track { background: transparent; }
+        .output-display::-webkit-scrollbar-thumb { background: rgba(155, 240, 11, 0.15); border-radius: 2px; }
+    </style>
+</head>
+<body>
+
+    <!-- FULL DISPLAY CONTAINER MATRIX HOUSING BACKGROUND TV -->
+    <div class="tv-container" id="chassisWrapper">
+        
+        <!-- INSET DIGITAL CRT PANEL CORE SCREEN -->
+        <div class="tv-screen">
+            
+            <!-- Animated static static white fuzz layer mapping -->
+            <div class="tv-static-layer"></div>
+
+            <!-- LOG CHANNELS VIEWPORT -->
+            <div class="output-display" id="outputDisplay">
+                <div class="log-entry">
+                    <span class="system-prefix">[MAINFRAME BOOT]</span> Channel transmission online.
+                    Type <span class="accent-text">help</span> for guidelines. Awaiting user input string...
+                </div>
+            </div>
+
+            <!-- HARD TERMINAL INPUT BLOCK LINE -->
+            <div class="input-line">
+                <span class="prompt-symbol" id="promptSymbol">SYS:&gt;</span>
+                <input type="text" id="terminalPrompt" autocomplete="off" autofocus placeholder="...">
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+        const promptInput = document.getElementById("terminalPrompt");
+        const displayGrid = document.getElementById("outputDisplay");
+        const chassis = document.getElementById("chassisWrapper");
+        const promptSymbol = document.getElementById("promptSymbol");
+
+        // Keep system focus locked onto command string input box
+        window.addEventListener("click", () => promptInput.focus());
+
+        promptInput.addEventListener("keydown", function(e) {
+            if (e.key === "Enter") {
+                const commandText = promptInput.value.trim();
+                promptInput.value = "";
+                if (commandText) {
+                    processDatabaseQuery(commandText);
+                }
+            }
+        });
+
+        function logToMonitor(sender, text, isAlert = false) {
+            const entry = document.createElement("div");
+            entry.className = "log-entry";
+            if (isAlert) entry.classList.add("alert-text");
+            
+            const timeStamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            entry.innerHTML = `<span class="system-prefix">[${timeStamp}] ${sender}:</span> ${text}`;
+            
+            displayGrid.appendChild(entry);
+            displayGrid.scrollTop = displayGrid.scrollHeight; // Auto-scrolling sweep
+        }
+
+        // --- CUSTOM FILTER CONTROLLER PROCESSOR MATRIX ---
+        function processDatabaseQuery(rawInput) {
+            const cleanInput = rawInput.toLowerCase().trim();
+            
+            logToMonitor("USER", `<span class="accent-text">${rawInput}</span>`);
+
+            // Flush temporary theme states unless target matching consecutive executions
+            if (cleanInput !== "friends") {
+                chassis.className = "tv-container";
+                promptSymbol.innerText = "SYS:>";
+            }
+
+            switch (cleanInput) {
+                
+                case "help":
+                    logToMonitor("SYSTEM", "Baseline configurations: <span class='accent-text'>about</span>, <span class='accent-text'>clear</span>, <span class='accent-text'>directory</span>, <span class='accent-text'>exit</span>. Use system parameters to uncover files.");
+                    break;
+
+                case "clear":
+                    displayGrid.innerHTML = "";
+                    logToMonitor("SYSTEM", "Display tube cache flushed.");
+                    break;
+
+                case "directory":
+                    logToMonitor("SYSTEM", "Subfolders detected inside ecosystem grid:<br>• /limejuice/<br>• /clamshell/<br>• /J.A.R.V.I.S/<br>• /fallingrocks/");
+                    break;
+
+                case "about":
+                    logToMonitor("SYSTEM", "Project Lime Mainframe UI v2.5. Engineered by <span class='accent-text'>[[wazooks]]</span>.");
+                    break;
+
+                case "exit":
+                    logToMonitor("SYSTEM", "Dropping voltage feed... Powering off.");
+                    setTimeout(() => { window.location.href = "../"; }, 1200);
+                    break;
+
+                // --- INTEGRATED TARGET SHORTCUT CASES ---
+
+                case "wazooks":
+                    logToMonitor("MAINFRAME", "Identity confirmed: System Creator. All console priorities assigned to level Alpha. Welcome back, chief.");
+                    break;
+
+                case "lime juice":
+                case "limejuice":
+                    logToMonitor("CORE_UI", "UI compiler flag verified: <span class='accent-text'>'Technically, lime juice built the ui for its parent project lol'</span>.");
+                    break;
+
+                case "prj lime":
+                case "prjlime":
+                    logToMonitor("ROOT_HUB", "System status check: Operational. Root architecture stable across all core asset directories.");
+                    break;
+
+                case "friends":
+                    chassis.className = "tv-container friends-theme";
+                    promptSymbol.innerText = "PERK:> ";
+                    logToMonitor("TV_NETWORK", "Broadcasting sitcom array feed. <span class='accent-text'>'I'll be there for you (When the rain starts to pour)'</span>. Enter another query to clear tube channels.");
+                    break;
+
+                case "fiddler's green":
+                case "fiddlers green":
+                    logToMonitor("SEAFARER", "Parsing old sailors logs... Fiddler's Green location pinpointed. <span class='accent-text'>Where drinking horns overflow and musicians play eternal sets.</span>");
+                    break;
+
+                case "jarvis":
+                case "j.a.r.v.i.s":
+                    logToMonitor("AI_REPLY", "Bypassing server firewalls. Embedded Butler script intercepted: <span class='accent-text'>JARVIS: 'More alcohol, sir?'</span>");
+                    break;
+
+                case "fallingrocks":
+                case "falling rocks":
+                    logToMonitor("PHYSICS_LOG", "Canvas sandbox directory validated. Hidden execution listener caught inside memory index. <span class='accent-text'>System Override Command: Key[E] active.</span>");
+                    break;
+
+                case "clamshell":
+                    logToMonitor("AUDIO_GRID", "Band asset array synchronized. Active tracking connection established: <span class='accent-text'>://soundcloud.com</span>.");
+                    break;
+
+                case "god's green earth":
+                case "gods green earth":
+                    logToMonitor("MAINFRAME", "<span class='gold-text'>'As long as I'm on God's green earth, I will keep writing single-file scripts.'</span> Pipeline compilation locked.");
+                    break;
+
+                default:
+                    // Brief static screen visual glitch distortion for fake/failed requests
+                    chassis.classList.add("glitch-flash");
+                    setTimeout(() => { chassis.classList.remove("glitch-flash"); }, 300);
+                    logToMonitor("STATIC_RECEPTION", `Signal frequency <span class="alert-text">"${rawInput}"</span> dead or unmapped on this channel. Check configuration dials.`, true);
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
