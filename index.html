@@ -228,12 +228,12 @@
             logToMonitor("USER", `<span class="accent-text">${rawInput}</span>`);
 
             // Flush temporary theme states unless target matching consecutive executions
-            if (cleanInput !== "friends") {
+            if (cleanInput !== "friends" && cleanInput !== "bill cipher") {
                 document.body.style.backgroundColor = "#ffffff"; // Restores whiteout canvas standard
                 chassis.className = "tv-container";
                 promptSymbol.innerText = "SYS:>";
+                promptSymbol.style.color = "#9bf00b";
             }
-
             switch (cleanInput) {
                 
                 case "help":
@@ -257,11 +257,53 @@
                     logToMonitor("SYSTEM", "Closing secure database link... Dropping server core.");
                     setTimeout(() => { window.location.href = "../"; }, 1200);
                     break;
+                case "jack":
+                case "captain jack":
+                case "jack sparrow":
+                    logToMonitor("PIRATE_LOG", "Internal coordinate vector alignment locked. <span class='accent-text'>'Wherever we want to go, we go. That's what a ship is, you know.'</span> Warning: This console does not point north.");
+                    break;
 
-                // --- CORE LORE AND INPUT RESPONSE ALIAS CASES ---
+                case "america":
+                    logToMonitor("SYS_USA", "Data register loaded. Stars and stripes network handshake complete. Operational freedom: 100%.");
+                    break;
 
+                case "chug jug":
+                case "chugjug":
+                    logToMonitor("ITEM_DROP", "Shield capacity restored to 100. <span class='accent-text'>'I'd really love to chug jug with you.'</span> Protocol wrapped.");
+                    break;
+
+                case "xbox":
+                    logToMonitor("CONSOLE", "Green ambient diagnostic lit. Network state: Xbox Network Online. Achievement Unlocked: Terminal Discovery.");
+                    break;
+
+                case "fortnite":
+                    logToMonitor("BATTLE_BUS", "Dropping into coordinate array matrix. <span class='accent-text'>Storm eye shrinking in 0:30.</span> Keep your blueprints ready.");
+                    break;
+
+                case "friends":
+                    document.body.style.backgroundColor = "#120a1a"; // Monica's apartment dark purple background swap
+                    chassis.className = "tv-container friends-theme";
+                    promptSymbol.innerText = "PERK:>"; 
+                    logToMonitor("TV_NETWORK", "Broadcasting sitcom array feed. <span class='accent-text'>'I'll be there for you (When the rain starts to pour)'</span>. Enter another query to clear tube channels.");
+                    break;
+
+                case "bill cipher":
+                case "billcipher":
+                    document.body.style.backgroundColor = "#1c0404"; // Blood red warning overlay
+                    promptSymbol.innerText = "WEIRD_MAGEDDON:> ";
+                    promptSymbol.style.color = "#ff3333";
+                    logToMonitor("⚠️_MINDSCAPE", "<span class='alert-text'>THE UNIVERSE IS A HOLOGRAM, REALITY IS AN ILLUSION! BUY GOLD, BYE!</span> He is inside the core processor mainframe files.", true);
+                    break;
+
+                case "github":
+                    logToMonitor("OCTOCAT", "Main repository synchronized. Committing updates to parent main matrix branch folder.");
+                    break;
+
+                case "king":
+                    logToMonitor("CROWN_REG", "Royalty validation register online. Uneasy lies the head that holds the cryptographic access key.");
+                    break;
                 case "wazooks":
-                    logToMonitor("MAINFRAME", "Identity confirmed: System Creator. All console priorities assigned to level Alpha. Welcome back, chief.");
+                    logToMonitor("MAINFRAME", "Identity confirmed: System Creator. All console permissions assigned to level Alpha. Welcome back, chief.");
                     break;
 
                 case "lime juice":
@@ -272,13 +314,6 @@
                 case "prj lime":
                 case "prjlime":
                     logToMonitor("ROOT_HUB", "System status check: Operational. Root architecture stable across all core asset directories.");
-                    break;
-
-                case "friends":
-                    document.body.style.backgroundColor = "#120a1a"; // Monica's apartment dark purple background swap
-                    chassis.className = "tv-container friends-theme";
-                    promptSymbol.innerText = "PERK:>"; // Tightened handles
-                    logToMonitor("TV_NETWORK", "Broadcasting sitcom array feed. <span class='accent-text'>'I'll be there for you (When the rain starts to pour)'</span>. Enter another query to clear tube channels.");
                     break;
 
                 case "fiddler's green":
@@ -297,12 +332,142 @@
                     break;
 
                 case "clamshell":
-                    logToMonitor("AUDIO_GRID", "Band asset array synchronized. Active tracking connection established: <span class='accent-text'>://soundcloud.com</span>.");
+                    logToMonitor("AUDIO_GRID", "Band asset array synchronized. Musical subsidiary connection established.");
                     break;
 
                 case "god's green earth":
                 case "gods green earth":
                     logToMonitor("MAINFRAME", "<span class='gold-text'>'As long as I'm on God's green earth, I will keep writing single-file scripts.'</span> Pipeline compilation locked.");
+                    break;
+                case "yhwh":
+                    logToMonitor("ALPHA_OMEGA", "<span class='gold-text'>I AM THAT I AM. The foundational database architecture that outlasts the network loop.</span>");
+                    break;
+
+                case "muhammad":
+                    logToMonitor("FAITH_LOG", "Ecosystem peace array active. Final prophet register recognized inside the mainframe historical records.");
+                    break;
+
+                case "forever":
+                case "never":
+                    logToMonitor("TIMELINE", "Loop constraint engaged. Absolute infinite loop validation. Time array bounds disabled.");
+                    break;
+
+                case "love":
+                    logToMonitor("CORE_LOG", "Heartbeat monitoring framework active. Parameter status: Crucial core function discovered.");
+                    break;
+
+                case "hulu":
+                case "disney":
+                    logToMonitor("STREAM_NET", "Buffering pipeline channels... Media subsidiary package authenticated. Sit back and watch the screen.");
+                    break;
+
+                case "lemons":
+                case "limes":
+                case "citrus":
+                    logToMonitor("FRUIT_UI", "Acidic engine ratios balanced. High concentration juice supply loaded directly into the main UI wrappers.");
+                    break;
+
+                case "sprite":
+                    logToMonitor("SODA_CORE", "Lemon-lime carbonation trigger deployed. Refreshment protocol fully initialized inside the legislative mainframe.");
+                    break;
+
+                case "coke":
+                case "cocacola":
+                case "cola":
+                case "pepsi":
+                    logToMonitor("BEVERAGE", "Classic dark formula compilation complete. Cool ambient storage database parameters checked.");
+                    break;
+
+                case "beer":
+                case "whiskey":
+                    logToMonitor("STARK_BAR", "JARVIS automated dispensing valve unlocked. Refilling Tony's whiskey decanter now, Sir.");
+                    break;
+                case "silksong":
+                case "hollow knight":
+                    logToMonitor("Pharloom_BUG", "<span style='color: #ff4a4a; text-shadow: 0 0 8px rgba(255, 74, 74, 0.4);'>'No cost too great.'</span> Silk strings weaving through the deep nests. Database entry tracking: Still pending... waiting...");
+                    break;
+
+                case "bees knees":
+                case "beesknees":
+                    logToMonitor("EXCELLENT", "Status report: Absolutely top-tier choice string. The ultimate 1920s verification token.");
+                    break;
+
+                case "tiktok":
+                    logToMonitor("ALGORITHM", "Vertical scrolling loop sequence forced. Attention span limits restricted to 15 seconds. Keep scrolling.");
+                    break;
+
+                case "og":
+                    logToMonitor("LEGACY", "Respect protocols updated. Original template files validated. Retro framework recognized.");
+                    break;
+
+                case "caveman":
+                    logToMonitor("OOG_BOOG", "UNGA BUNGA. CRASH ROCKS TOGETHER. DISCOVER CODE FIRE. SYSTEM SMASH.");
+                    break;
+
+                case "stark industries":
+                case "starkindustries":
+                    logToMonitor("MALIBU_CORE", "Stark Industries secure defense server. Arc reactor output: Stable. Welcome back to the main lab, Sir.");
+                    break;
+
+                case "terminal":
+                    logToMonitor("CLI_EMU", "C:\\> ECHO INTERFACE SIMULATION ENABLED. DIRECT ROOT REPOSITORIES ACCESSIBLE via MAIN COMMAND CONSOLE.");
+                    break;
+
+                case "megamind":
+                    logToMonitor("METRO_CITY", "Presentation protocol checked. <span class='accent-text'>'The difference between a villain and a super villain is PRESENTATION!'</span> Blue mindscape layout loaded.");
+                    break;
+
+                case "hoist the colors":
+                case "hoist the colours":
+                    logToMonitor("🏴‍☠️_BRETHREN", "<span class='accent-text'>'The King and his men stole the Queen from her bed...'</span> Hoist the colors high. A pirate court assembly has been requested.");
+                    break;
+                case "gacha":
+                case "genshin impact":
+                case "genshin":
+                    logToMonitor("PITY_COUNT", "Primogem repository spent. Wishing array activated... 5-star character dropped. 50/50 state: Failed.");
+                    break;
+
+                case "battle":
+                case "witch's duel":
+                case "witchs duel":
+                    logToMonitor("BOILING_ISLES", "Spell circles expanding. Magic duel sequence initialized. Prepare your glyph scripts immediately.");
+                    break;
+
+                case "amity":
+                case "luz":
+                    logToMonitor("OWL_HOUSE", "Lumity relationship index: 100% stable. Good witch Azura book volume nodes successfully backed up to memory.");
+                    break;
+
+                case "kinger":
+                case "pomni":
+                case "jax":
+                    logToMonitor("DIGITAL_CIRCUS", "Exit door search function failed. Abstraction warning metrics tracked. Keep your headset strapped on tight.");
+                    break;
+
+                case "minecraft":
+                    logToMonitor("VOXEL_GRID", "Generating biome matrix... Seed confirmed. Diamond ore discovered at coordinate row depth level Y=-58.");
+                    break;
+
+                case "angelica":
+                    logToMonitor("PIRATE_LORE", "Searching Queen Anne's Revenge logs... Angelica Teach's voodoo deck manipulation triggers located.");
+                    break;
+
+                case "blackbeard":
+                    logToMonitor("EDWARD_TEACH", "Smokey fuses lit inside the beard. Triton's sword array synced. The tide is turning, mates.");
+                    break;
+                case "idk":
+                case "idc":
+                    logToMonitor("LAZY_LOG", "System comprehension fallback option called. Shrugging framework instantiated: ¯\\_(ツ)_/¯");
+                    break;
+
+                case "lol":
+                case "lmao":
+                case "lmfao":
+                    logToMonitor("SYS_LAUGH", "Chuckle buffers overflowed. Humor array matrices fully registered by legislative interface compiler.");
+                    break;
+
+                case "bro":
+                    logToMonitor("FRAT_PROTOCOL", "Bro register checked. Unbreakable brotherhood link established between user and compiler logic workspace.");
                     break;
 
                 default:
