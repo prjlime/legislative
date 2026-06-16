@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>lime mainframe</title>
     <style>
-        /* RESET AND CANVAS WRAPPER ARCHITECTURE */
+        /* RESET AND WHITEOUT CONTAINER ARCHITECTURE */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: #050507;
+            background-color: #ffffff; /* Stark whiteout background */
             font-family: 'Courier New', Courier, monospace;
             color: #9bf00b; /* Core project lime green tint */
             display: flex;
@@ -21,39 +21,33 @@
             transition: background-color 0.5s ease;
         }
 
-        /* THE CHASSIS TV FRAME CONSTRUCT */
+        /* FLOATING TERMINAL CONSOLE BOX */
         .tv-container {
             position: relative;
-            width: 800px;  /* Desktop footprint size */
-            height: 600px;
-            background-image: url('tv.png');
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            background-position: center;
+            width: 650px;
+            height: 450px;
             box-sizing: border-box;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* VIRTUAL CRT GLASS SCREEN INSET (Calibrated for your specific image) */
+        /* RETRO SCREEN WORKSPACE INSET */
         .tv-screen {
             position: absolute;
-            top: 13.5%;       /* Lowered slightly to line up with the top glass curve */
-            left: 17%;        /* Pushed inward right to clear the wider left bezel margin */
-            width: 66%;       /* Adjusted width ratio for this specific aspect ratio */
-            height: 61.5%;    /* Shortened slightly to avoid bleeding into the bottom control strip */
+            width: 100%;
+            height: 100%;
             background-color: #0b0b0f;
-            border-radius: 35px / 25px; /* Creates an asymmetrical curved bulb look */
+            border-radius: 8px; /* Clean, modern edge profiling */
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            padding: 25px 25px 20px 25px;
+            padding: 25px;
             box-sizing: border-box;
-            box-shadow: inset 0 0 40px rgba(0,0,0,0.9), 0 0 20px rgba(155, 240, 11, 0.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), inset 0 0 30px rgba(0, 0, 0, 0.8);
         }
 
-        /* Ambient scanline glow filter texture overlayed over glass elements */
+        /* Ambient scanline glow filter texture overlayed over terminal elements */
         .tv-screen::before {
             content: " ";
             display: block;
@@ -66,12 +60,12 @@
             opacity: 0.8;
         }
 
-        /* Dynamic white noise/static animation background */
+        /* Subtle matrix white noise/static background animation layer */
         .tv-static-layer {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://w3.org id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.04; /* Very subtle fuzz layer inside the screen space */
+            opacity: 0.03;
             z-index: 2;
             pointer-events: none;
             animation: staticNoise 0.15s steps(2) infinite;
@@ -95,7 +89,7 @@
         .log-entry {
             font-size: 0.85rem;
             line-height: 1.4;
-            margin-bottom: 10px;
+            margin-bottom: 6px; /* Tightened up consecutive lines vertical margin padding */
             white-space: pre-wrap;
             word-wrap: break-word;
         }
@@ -129,7 +123,7 @@
 
         .prompt-symbol {
             font-size: 0.9rem;
-            margin-right: 8px;
+            margin-right: 4px; /* Shrunk spacing margin down for tightly bonded string */
             user-select: none;
         }
 
@@ -142,11 +136,13 @@
             font-size: 0.9rem;
             outline: none;
             caret-color: #9bf00b;
+            padding: 0;
+            margin: 0;
         }
 
         /* SYSTEM SCREEN OVERRIDES (MODIFICATIONS) */
         .friends-theme .tv-screen {
-            background-color: #1e112a; /* Monica's room violet layout tint */
+            background-color: #1e112a; /* Monica's room violet theme tint */
             color: #f7ca18;
         }
         .friends-theme #terminalPrompt {
@@ -158,8 +154,8 @@
         }
 
         @keyframes screenVibe {
-            0% { background-color: #ff3333; transform: scale(1.01); }
-            50% { background-color: #ffffff; transform: scale(0.99); }
+            0% { background-color: #ff3333; transform: scale(1.02); }
+            50% { background-color: #ffffff; transform: scale(0.98); }
             100% { background-color: #0b0b0f; }
         }
 
@@ -171,24 +167,21 @@
 </head>
 <body>
 
-    <!-- FULL DISPLAY CONTAINER MATRIX HOUSING BACKGROUND TV -->
+    <!-- MAIN CENTERING CONTAINER WRAPPER -->
     <div class="tv-container" id="chassisWrapper">
         
-        <!-- INSET DIGITAL CRT PANEL CORE SCREEN -->
+        <!-- CRT GRID INTERFACE SCREEN BOX -->
         <div class="tv-screen">
             
-            <!-- Animated static static white fuzz layer mapping -->
+            <!-- Animated subtle screen fuzz filter tracking -->
             <div class="tv-static-layer"></div>
 
-            <!-- LOG CHANNELS VIEWPORT -->
+            <!-- LOG OUTPUT PANEL CONTAINER -->
             <div class="output-display" id="outputDisplay">
-                <div class="log-entry">
-                    <span class="system-prefix">[MAINFRAME BOOT]</span> Channel transmission online.
-                    Type <span class="accent-text">help</span> for guidelines. Awaiting user input string...
-                </div>
+                <div class="log-entry"><span class="system-prefix">MAIN_BOOT:</span>Channel transmission online. Type <span class="accent-text">help</span> for guidelines. Awaiting user input string...</div>
             </div>
 
-            <!-- HARD TERMINAL INPUT BLOCK LINE -->
+            <!-- TERMINAL INPUT FORM PROMPT LINE -->
             <div class="input-line">
                 <span class="prompt-symbol" id="promptSymbol">SYS:&gt;</span>
                 <input type="text" id="terminalPrompt" autocomplete="off" autofocus placeholder="...">
@@ -203,7 +196,7 @@
         const chassis = document.getElementById("chassisWrapper");
         const promptSymbol = document.getElementById("promptSymbol");
 
-        // Keep system focus locked onto command string input box
+        // Keep system focus locked onto command string input box on viewport click
         window.addEventListener("click", () => promptInput.focus());
 
         promptInput.addEventListener("keydown", function(e) {
@@ -216,16 +209,16 @@
             }
         });
 
+        // Optimized printer: Zero spacing gap, no forced trailing linebreaks or timestamp block strings
         function logToMonitor(sender, text, isAlert = false) {
             const entry = document.createElement("div");
             entry.className = "log-entry";
             if (isAlert) entry.classList.add("alert-text");
             
-            const timeStamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            entry.innerHTML = `<span class="system-prefix">[${timeStamp}] ${sender}:</span> ${text}`;
+            entry.innerHTML = `<span class="system-prefix">${sender}:</span>${text}`;
             
             displayGrid.appendChild(entry);
-            displayGrid.scrollTop = displayGrid.scrollHeight; // Auto-scrolling sweep
+            displayGrid.scrollTop = displayGrid.scrollHeight; // Auto-scrolling grid focus
         }
 
         // --- CUSTOM FILTER CONTROLLER PROCESSOR MATRIX ---
@@ -236,6 +229,7 @@
 
             // Flush temporary theme states unless target matching consecutive executions
             if (cleanInput !== "friends") {
+                document.body.style.backgroundColor = "#ffffff"; // Restores whiteout canvas standard
                 chassis.className = "tv-container";
                 promptSymbol.innerText = "SYS:>";
             }
@@ -243,28 +237,28 @@
             switch (cleanInput) {
                 
                 case "help":
-                    logToMonitor("SYSTEM", "Baseline configurations: <span class='accent-text'>about</span>, <span class='accent-text'>clear</span>, <span class='accent-text'>directory</span>, <span class='accent-text'>exit</span>. Use system parameters to uncover files.");
+                    logToMonitor("SYSTEM", "Baseline configurations: <span class='accent-text'>about</span>, <span class='accent-text'>clear</span>, <span class='accent-text'>directory</span>, <span class='accent-text'>exit</span>. Use system keys to fetch logs.");
                     break;
 
                 case "clear":
                     displayGrid.innerHTML = "";
-                    logToMonitor("SYSTEM", "Display tube cache flushed.");
+                    logToMonitor("SYSTEM", "Display pipeline log memory cleared.");
                     break;
 
                 case "directory":
-                    logToMonitor("SYSTEM", "Subfolders detected inside ecosystem grid:<br>• /limejuice/<br>• /clamshell/<br>• /J.A.R.V.I.S/<br>• /fallingrocks/");
+                    logToMonitor("SYSTEM", "Ecosystem subfolders mapped on host device:<br>• /limejuice/<br>• /clamshell/<br>• /J.A.R.V.I.S/<br>• /fallingrocks/");
                     break;
 
                 case "about":
-                    logToMonitor("SYSTEM", "Project Lime Mainframe UI v2.5. Engineered by <span class='accent-text'>[[wazooks]]</span>.");
+                    logToMonitor("SYSTEM", "Project Lime Legislative Mainframe v2.5. Programmed and styled by <span class='accent-text'>[[wazooks]]</span>.");
                     break;
 
                 case "exit":
-                    logToMonitor("SYSTEM", "Dropping voltage feed... Powering off.");
+                    logToMonitor("SYSTEM", "Closing secure database link... Dropping server core.");
                     setTimeout(() => { window.location.href = "../"; }, 1200);
                     break;
 
-                // --- INTEGRATED TARGET SHORTCUT CASES ---
+                // --- CORE LORE AND INPUT RESPONSE ALIAS CASES ---
 
                 case "wazooks":
                     logToMonitor("MAINFRAME", "Identity confirmed: System Creator. All console priorities assigned to level Alpha. Welcome back, chief.");
@@ -281,8 +275,9 @@
                     break;
 
                 case "friends":
+                    document.body.style.backgroundColor = "#120a1a"; // Monica's apartment dark purple background swap
                     chassis.className = "tv-container friends-theme";
-                    promptSymbol.innerText = "PERK:> ";
+                    promptSymbol.innerText = "PERK:>"; // Tightened handles
                     logToMonitor("TV_NETWORK", "Broadcasting sitcom array feed. <span class='accent-text'>'I'll be there for you (When the rain starts to pour)'</span>. Enter another query to clear tube channels.");
                     break;
 
@@ -311,7 +306,7 @@
                     break;
 
                 default:
-                    // Brief static screen visual glitch distortion for fake/failed requests
+                    // Shakes and flashes the console screen red to symbolize transmission bugs
                     chassis.classList.add("glitch-flash");
                     setTimeout(() => { chassis.classList.remove("glitch-flash"); }, 300);
                     logToMonitor("STATIC_RECEPTION", `Signal frequency <span class="alert-text">"${rawInput}"</span> dead or unmapped on this channel. Check configuration dials.`, true);
